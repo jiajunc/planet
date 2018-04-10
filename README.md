@@ -1,6 +1,42 @@
-# BeLL apps Angular reboot prototype **Planet**
+## [Planet](#planet)
 
-Project to create a prototype for a reboot of the BeLL apps using Angular5 & CouchDB2.
+`Planet` is a latest iteration of [BeLL-Apps](https://github.com/open-learning-exchange/BeLL-Apps). It is a federated learning system optimized for deployment in remote area. It can be deployed in device as tiny as Raspberry Pi 3 to a more bigger server in the cloud.
+
+<center><img src="https://raw.githubusercontent.com/ole-vi/planet/docs/images/login.png" alt="Bash Logo" style="width: 400px;"/></center><br>
+
+## [Usage](#usage)
+
+### Getting started
+
+lorem ipsum
+
+#### Prerequisites
+
+#### Deployment
+
+
+## [Contributing](#contributing)
+
+### Getting ready
+
+#### Prerequisites
+
+#### Installing
+
+#### Running the tests
+
+##### Break down into end to end tests
+
+##### And coding style tests
+
+##### Built With
+
+* Angular
+* NPM
+* Docker
+
+## [Maintainers](#maintainers)
+
 
 ## To work on this
 
