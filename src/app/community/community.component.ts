@@ -38,7 +38,7 @@ export class CommunityComponent implements OnInit, AfterViewInit {
   }
 
   getCommunityList() {
-     this.couchService.allDocs('communityregistrationrequests')
+     this.couchService.allDocs('registrationRequests')
       .subscribe((data) => {
         this.communities.data = data;
       }, (error) => this.message = 'There was a problem getting Communities');
@@ -75,7 +75,7 @@ export class CommunityComponent implements OnInit, AfterViewInit {
         case 'reject':
         case 'unlink':
           const updatedCommunity = { ...community, registrationRequest: change };
-          this.couchService.put('communityregistrationrequests/' + communityId, updatedCommunity)
+          this.couchService.put('registrationRequests/' + communityId, updatedCommunity)
             .subscribe((data) => {
               this.updateRev(data, this.communities.data);
               this.editDialog.close();
@@ -86,9 +86,9 @@ export class CommunityComponent implements OnInit, AfterViewInit {
             // When accepting a registration request, add learner role to user from that community/nation,
             this.unlockUser(community),
             // add registrant's information to this database,
-            this.couchService.post('nations', { ...communityInfo, registrationRequest: 'accepted' }),
+            this.couchService.post('childPlanets', { ...communityInfo, registrationRequest: 'accepted' }),
             // update registration request to accepted
-            this.couchService.put('communityregistrationrequests/' + communityId, { ...community, registrationRequest: 'accepted' })
+            this.couchService.put('registrationRequests/' + communityId, { ...community, registrationRequest: 'accepted' })
           ]).subscribe((data) => {
             community.registrationRequest = 'accepted';
             this.updateRev(data, this.communities.data);
@@ -103,7 +103,7 @@ export class CommunityComponent implements OnInit, AfterViewInit {
     return () => {
     // With object destructuring colon means different variable name assigned, i.e. 'id' rather than '_id'
       const { _id: id, _rev: rev } = community;
-      this.couchService.delete('communityregistrationrequests/' + id + '?rev=' + rev)
+      this.couchService.delete('registrationRequests/' + id + '?rev=' + rev)
         .subscribe((data) => {
           // It's safer to remove the item from the array based on its id than to splice based on the index
           this.communities.data = this.communities.data.filter((comm: any) => data.id !== comm._id);
