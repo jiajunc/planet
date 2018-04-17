@@ -18,7 +18,7 @@ export class NationComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   displayedColumns = [ 'name', 'code', 'url', 'status', 'action' ];
-  readonly dbName = 'childPlanets';
+  readonly dbName = 'child_planets';
   message = '';
   deleteDialog: any;
   viewNationDetailDialog: any;
@@ -100,7 +100,7 @@ export class NationComponent implements OnInit, AfterViewInit {
   }
 
   getCommunity(url) {
-    this.couchService.allDocs('childPlanets', { domain: url })
+    this.couchService.allDocs('child_planets', { domain: url })
       .subscribe((res: any) => {
         this.nations.data = res.rows.map(nations => {
           return nations;

@@ -151,7 +151,7 @@ export class ConfigurationComponent implements OnInit {
         // then add configuration
         this.couchService.post('configurations', configuration),
         // then post configuration to parent planet's registration requests
-        this.couchService.post('registrationRequests', configuration, { domain: configuration.parentDomain })
+        this.couchService.post('registration_requests', configuration, { domain: configuration.parentDomain })
           .pipe(switchMap(data => {
             // then add user to parent planet with id of configuration and isUserAdmin set to false
             userDetail['requestId'] =  data.id;
