@@ -105,7 +105,7 @@ export class ConfigurationComponent implements OnInit {
   }
 
   getNationList() {
-    this.couchService.post('nations/_find',
+    this.couchService.post('child_planets/_find',
       findDocuments({ 'planetType': 'nation' }, 0 ),
       { domain: environment.centerAddress })
       .subscribe((data) => {
