@@ -14,6 +14,7 @@ import { ResourcesService } from './resources.service';
 import { Subject } from 'rxjs/Subject';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import * as constants from './resources-constants';
+import { environment } from '../../environments/environment';
 
 @Component({
   templateUrl: './resources.component.html',
@@ -284,6 +285,23 @@ export class ResourcesComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       return emptySpace;
     }, '');
+  }
+
+  sync(stream) {
+    const repData = {
+      _id: 'sync_down_' + this.dbName,
+      source: "https://vlax0110:vlax0110@" + this.userService.getConfig().parentDomain + "/" + this.dbName,
+      target: environment.couchAddress + this.dbName,
+      create_target:  true,
+      continuous: true,
+      user_ctx: {
+        ...this.userService.get()
+      }
+    };
+    this.couchService.post('_replicator', repData)
+    .subscribe((data) => {
+      this.planetMessageService.showMessage('Replication successful');
+    }, (error) => this.planetMessageService.showMessage('Replication failed'));
   }
 
 }
