@@ -98,6 +98,7 @@ export class LoginFormComponent {
   login({ name, password }: {name: string, password: string}, isCreate: boolean) {
     this.couchService.post('_session', { 'name': name, 'password': password }, { withCredentials: true })
       .pipe(switchMap((data) => {
+        this.userService.setBase64(name, password);
         // Navigate into app
         if (isCreate) {
           return fromPromise(this.router.navigate( [ 'users/update/' + name ]));
