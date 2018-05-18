@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../shared/user.service';
+import { CouchService } from '../shared/couchdb.service';
 
 @Component({
   template: `
@@ -13,6 +14,8 @@ import { UserService } from '../shared/user.service';
     </div>
     <div class="view-container" *ngIf="displayDashboard && planetType !== 'center'">
       <h3 i18n>{{ planetType === 'community' ? 'Nation' : 'Center' }} List</h3><br />
+      <b i18n>{{ planetType === 'community' ? 'Nation' : 'Center' }} Version:</b> {{parentConfig?.version}}
+      <b i18n>Local Version:</b> {{userService.get()?.version}}<br />
       <a routerLink="resources" i18n mat-raised-button>List Resources</a>
       <a routerLink="courses" i18n mat-raised-button>List Courses</a>
       <a routerLink="meetups" i18n mat-raised-button>List Meetups</a>
@@ -26,9 +29,11 @@ export class ManagerDashboardComponent implements OnInit {
   displayDashboard = true;
   message = '';
   planetType = this.userService.getConfig().planetType;
+  parentConfig: any;
 
   constructor(
-    private userService: UserService
+    private userService: UserService,
+    private couchService: CouchService
   ) {}
 
   ngOnInit() {
@@ -37,6 +42,11 @@ export class ManagerDashboardComponent implements OnInit {
       // A non-admin user cannot receive all user docs
       this.displayDashboard = false;
       this.message = 'Access restricted to admins';
+    } else if (this.userService.getConfig().planetType !== 'center') {
+      this.couchService.allDocs('configurations', { domain: this.userService.getConfig().parentDomain })
+      .subscribe(config => {
+        this.parentConfig = config;
+      });
     }
   }
 
