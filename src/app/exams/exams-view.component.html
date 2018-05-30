@@ -12,9 +12,9 @@
     <p>{{question.body}}</p>
     <ng-container [ngSwitch]="question.type">
       <mat-form-field *ngSwitchCase="'input'">
-        <input matInput i18n-placeholder placeholder="Enter answer here" [(ngModel)]="answer">
+        <input matInput i18n-placeholder placeholder="Enter answer here" [(ngModel)]="answer" [disabled]="previewMode">
       </mat-form-field>
-      <mat-radio-group *ngSwitchCase="'select'" class="planet-radio-group" [(ngModel)]="answer">
+      <mat-radio-group *ngSwitchCase="'select'" class="planet-radio-group" [(ngModel)]="answer" [disabled]="previewMode">
         <mat-radio-button *ngFor="let option of question.choices" [value]="option" class="planet-radio-button">
           {{option}}
         </mat-radio-button>

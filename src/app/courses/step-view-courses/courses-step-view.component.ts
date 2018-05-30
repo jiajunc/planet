@@ -20,6 +20,7 @@ export class CoursesStepViewComponent implements OnInit, OnDestroy {
   examStart = 1;
   attempts = 0;
   showExamButton = false;
+  previewMode = true;
   resource: any;
 
   constructor(
@@ -36,6 +37,7 @@ export class CoursesStepViewComponent implements OnInit, OnDestroy {
       this.maxStep = course.steps.length;
       if (this.stepDetail.exam) {
         this.showExamButton = this.checkMyCourses(course._id);
+        this.previewMode = !this.showExamButton;
         this.coursesService.openSubmission({
           parentId: this.stepDetail.exam._id + '@' + course._id,
           parent: this.stepDetail.exam,
@@ -81,7 +83,11 @@ export class CoursesStepViewComponent implements OnInit, OnDestroy {
   }
 
   goToExam() {
-    this.router.navigate([ 'exam', this.examStart ], { relativeTo: this.route });
+    if (this.previewMode) {
+      this.router.navigate([ 'preview', this.examStart ], { relativeTo: this.route });
+    } else {
+      this.router.navigate([ 'exam', this.examStart ], { relativeTo: this.route });
+    }
   }
 
 }

@@ -14,6 +14,8 @@ export class ExamsViewComponent implements OnInit, OnDestroy {
 
   onDestroy$ = new Subject<void>();
   question: any = { header: '', body: '', type: '', choices: [] };
+  previewMode = this.route.snapshot.data.preview || false;
+  courseId = '';
   questionNum = 0;
   stepNum = 0;
   maxQuestions = 0;
@@ -42,7 +44,8 @@ export class ExamsViewComponent implements OnInit, OnDestroy {
     this.route.paramMap.pipe(takeUntil(this.onDestroy$)).subscribe((params: ParamMap) => {
       this.questionNum = +params.get('questionNum'); // Leading + forces string to number
       this.stepNum = +params.get('stepNum');
-      this.coursesService.requestCourse({ courseId: params.get('id') });
+      this.courseId = params.get('id');
+      this.coursesService.requestCourse({ courseId: this.courseId });
     });
   }
 
@@ -53,7 +56,9 @@ export class ExamsViewComponent implements OnInit, OnDestroy {
 
   nextQuestion(questionNum: number) {
     const close = questionNum === this.maxQuestions;
-    this.coursesService.updateSubmission(this.answer, this.questionNum - 1, close);
+    if (!this.previewMode) {
+      this.coursesService.updateSubmission(this.answer, this.questionNum - 1, close);
+    }
     this.answer = '';
     if (close) {
       this.goBack();
