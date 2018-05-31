@@ -6,7 +6,7 @@ import { UserService } from '../shared/user.service';
 import { Subject } from 'rxjs/Subject';
 import { of } from 'rxjs/observable/of';
 import { forkJoin } from 'rxjs/observable/forkJoin';
-import { switchMap, catchError, map, takeUntil } from 'rxjs/operators';
+import { switchMap, catchError, map } from 'rxjs/operators';
 
 @Injectable()
 export class MeetupService {
@@ -14,17 +14,16 @@ export class MeetupService {
   private meetupUpdated = new Subject<any[]>();
   meetupUpdated$ = this.meetupUpdated.asObservable();
   meetups = [];
-  userShelf = this.userService.getUserShelf();
-  private onDestroy$ = new Subject<void>();
+  userShelf = this.userService.shelf;
 
   constructor(
     private couchService: CouchService,
     private userService: UserService,
   ) {
-    this.userService.shelfChange$.pipe(takeUntil(this.onDestroy$))
-      .subscribe(() => {
-        this.userShelf = this.userService.getUserShelf();
-        this.meetupUpdated.next(this.meetupList(this.meetups, this.userShelf.meetupIds));
+    this.userService.shelfChange$
+      .subscribe((shelf: any) => {
+        this.userShelf = shelf;
+        this.meetupUpdated.next(this.meetupList(this.meetups, shelf.meetupIds || []));
       });
     }
 
@@ -67,7 +66,7 @@ export class MeetupService {
     return this.couchService.put('shelf/' + this.userService.get()._id, this.userShelf)
       .pipe(map((response) => {
         this.userShelf._rev = response.rev;
-        this.userService.setShelf(this.userShelf);
+        this.userService.shelf = this.userShelf;
         return { response, participate };
     }));
   }
