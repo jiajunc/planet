@@ -7,6 +7,7 @@ import { Subject } from 'rxjs/Subject';
 export class CoursesService {
 
   course: any = { _id: '' };
+  submission: any = { courseId: '', examId: '' };
   private courseUpdated = new Subject<any[]>();
   courseUpdated$ = this.courseUpdated.asObservable();
   stepIndex: any;

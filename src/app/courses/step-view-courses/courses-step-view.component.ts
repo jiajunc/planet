@@ -3,6 +3,8 @@ import { CoursesService } from '../courses.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { takeUntil } from 'rxjs/operators';
+import { UserService } from '../../shared/user.service';
+import { SubmissionsService } from '../../submissions/submissions.service';
 
 @Component({
   templateUrl: './courses-step-view.component.html',
@@ -16,18 +18,37 @@ export class CoursesStepViewComponent implements OnInit, OnDestroy {
   stepDetail: any = { stepTitle: '', description: '' };
   maxStep = 1;
   resourceUrl = '';
+  examStart = 1;
+  attempts = 0;
+  showExamButton = false;
+  resource: any;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private coursesService: CoursesService
-  ) { }
+    private coursesService: CoursesService,
+    private userService: UserService,
+    private submissionsService: SubmissionsService
+  ) {}
 
   ngOnInit() {
     this.coursesService.courseUpdated$.pipe(takeUntil(this.onDestroy$)).subscribe((course: any) => {
       // To be readable by non-technical people stepNum param will start at 1
       this.stepDetail = course.steps[this.stepNum - 1];
       this.maxStep = course.steps.length;
+      if (this.stepDetail.exam) {
+        this.showExamButton = this.checkMyCourses(course._id);
+        this.submissionsService.openSubmission({
+          parentId: this.stepDetail.exam._id + '@' + course._id,
+          parent: this.stepDetail.exam,
+          user: this.userService.get().name,
+          type: 'exam' });
+      }
+      this.resource = this.stepDetail.resources ? this.stepDetail.resources[0] : undefined;
+      this.submissionsService.submissionUpdated$.pipe(takeUntil(this.onDestroy$)).subscribe(({ submission, attempts }) => {
+        this.examStart = submission.answers.length + 1;
+        this.attempts = attempts;
+      });
     });
     this.route.paramMap.pipe(takeUntil(this.onDestroy$)).subscribe((params: ParamMap) => {
       this.stepNum = +params.get('stepNum'); // Leading + forces string to number
@@ -53,8 +74,16 @@ export class CoursesStepViewComponent implements OnInit, OnDestroy {
     this.resourceUrl = resourceUrl;
   }
 
+  checkMyCourses(courseId: string) {
+    return this.userService.shelf.courseIds.includes(courseId);
+  }
+
+  onResourceChange(value) {
+    this.resource = value;
+  }
+
   goToExam() {
-    this.router.navigate([ 'exam', 1 ], { relativeTo: this.route });
+    this.router.navigate([ 'exam', { questionNum: this.examStart } ], { relativeTo: this.route });
   }
 
 }
