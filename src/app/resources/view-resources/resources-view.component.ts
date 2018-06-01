@@ -32,6 +32,7 @@ export class ResourcesViewComponent implements OnInit, OnDestroy {
   resource: any = {};
   mediaType = '';
   resourceSrc = '';
+  resourceUrl: '';
   pdfSrc: any;
   contentType = '';
   // If parent route, url will use parent domain.  If not uses this domain.
@@ -60,7 +61,7 @@ export class ResourcesViewComponent implements OnInit, OnDestroy {
       }, error => console.log(error), () => console.log('complete getting resource id'));
     this.resourcesService.resourcesUpdated$.pipe(takeUntil(this.onDestroy$))
       .subscribe((resourceArr) => {
-        this.setResource(resourceArr[0]);
+        this.resource = resourceArr[0];
       });
   }
 
@@ -69,21 +70,10 @@ export class ResourcesViewComponent implements OnInit, OnDestroy {
     this.onDestroy$.complete();
   }
 
-  setResource(resource: any) {
-    this.resource = resource;
-    if (resource._attachments) {
-      // openWhichFile is used to label which file to start with for HTML resources
-      const filename = resource.openWhichFile || Object.keys(resource._attachments)[0];
-      this.contentType = resource._attachments[filename].content_type;
-      this.resourceSrc = this.urlPrefix + resource._id + '/' + filename;
-
-      const mediaTypes = [ 'image', 'pdf', 'audio', 'video', 'zip' ];
-      this.mediaType = resource.mediaType || mediaTypes.find((type) => this.contentType.indexOf(type) > -1) || 'other';
-    }
-    if (this.mediaType === 'pdf' || this.mediaType === 'HTML') {
-      this.pdfSrc = this.sanitizer.bypassSecurityTrustResourceUrl(this.resourceSrc);
-    }
+  setResourceUrl(resourceUrl: string) {
+    this.resourceUrl = resourceUrl;
   }
+
 
   resourceActivity(resourceId, activity) {
     const data = {
