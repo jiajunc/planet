@@ -17,6 +17,7 @@ import { CoursesStepViewComponent } from './step-view-courses/courses-step-view.
 import { CoursesService } from './courses.service';
 import { ResourcesViewerComponent } from '../resources/view-resources/resources-viewer.component';
 import { ExamsViewComponent } from '../exams/exams-view.component';
+import { ResourcesModule } from '../resources/resources.module';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import { ExamsViewComponent } from '../exams/exams-view.component';
     ReactiveFormsModule,
     PlanetFormsModule,
     PlanetDialogsModule,
-    MaterialModule
+    MaterialModule,
+    ResourcesModule
   ],
   declarations: [
     CoursesComponent,
@@ -35,7 +37,6 @@ import { ExamsViewComponent } from '../exams/exams-view.component';
     CoursesViewComponent,
     CoursesStepComponent,
     CoursesStepViewComponent,
-    ResourcesViewerComponent,
     ExamsAddComponent,
     ExamsQuestionComponent,
     ExamsViewComponent

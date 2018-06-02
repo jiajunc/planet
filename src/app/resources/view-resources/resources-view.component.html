@@ -10,13 +10,13 @@
       {fullView, select, on {Show} off {Hide}} details
     </button>
     <span class="toolbar-fill"></span>
-    <a href={{resourceSrc}} mat-icon-button download [disabled]="!resource.isDownloadable">
+    <a href={{resourceSrc}} mat-icon-button download [disabled]="!resource?.isDownloadable">
       <mat-icon>file_download</mat-icon>
     </a>
   </mat-toolbar>
   <div class="view-container" [ngClass]="{'full-view-container':fullView==='on'}">
     <div class="resource-detail bg-light-grey" [ngClass]="{'invisible':fullView==='on'}">
-      <planet-resources-rating [rating]="resource.rating" [resourceId]="resource._id"></planet-resources-rating>
+      <planet-resources-rating [rating]="resource?.rating" [resourceId]="resource?._id"></planet-resources-rating>
       <p><b>Author:</b> <i>{{resource.author}}</i></p>
       <p><b>Published by:</b> {{resource.Publisher}} on {{resource.year}}</p>
       <p><b>Media:</b> {{ resource.medium }}</p>
@@ -29,7 +29,7 @@
     </div>
     <planet-resources-viewer
       *ngIf="resource"
-      [resourceId]="resource._id"
+      [resourceId]="resource?._id"
       (resourceUrl)="setResourceUrl($event)">
     </planet-resources-viewer>
   </div>

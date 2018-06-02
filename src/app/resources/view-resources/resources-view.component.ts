@@ -32,7 +32,6 @@ export class ResourcesViewComponent implements OnInit, OnDestroy {
   resource: any = {};
   mediaType = '';
   resourceSrc = '';
-  resourceUrl: '';
   pdfSrc: any;
   contentType = '';
   // If parent route, url will use parent domain.  If not uses this domain.
@@ -71,7 +70,7 @@ export class ResourcesViewComponent implements OnInit, OnDestroy {
   }
 
   setResourceUrl(resourceUrl: string) {
-    this.resourceUrl = resourceUrl;
+    this.resourceSrc = resourceUrl;
   }
 
 
