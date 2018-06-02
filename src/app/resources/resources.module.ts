@@ -25,7 +25,14 @@ import { PlanetDialogsModule } from '../shared/dialogs/planet-dialogs.module';
     HttpClientJsonpModule,
     PlanetDialogsModule
   ],
-  declarations: [ ResourcesComponent, ResourcesViewComponent, ResourcesViewerComponent, ResourcesAddComponent, ResourcesRatingComponent, PlanetStackedBarComponent ],
+  declarations: [
+    ResourcesComponent,
+    ResourcesViewComponent,
+    ResourcesViewerComponent,
+    ResourcesAddComponent,
+    ResourcesRatingComponent,
+    PlanetStackedBarComponent
+  ],
   exports: [ ResourcesViewerComponent ]
 })
 export class ResourcesModule {}
